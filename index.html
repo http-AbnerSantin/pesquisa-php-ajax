@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal</title>
+    <link rel="stylesheet" href="public/css/bootstrap.css">
+    <link rel="stylesheet" href="public/css/all.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Busca Instantanea Demo</h2>
+                <input type="text" name="busca" id="busca" class="form-control" placeholder="pesquise algum usuario">
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered text-center">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Provincia</th>
+                            <th>BI</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tabela">
+                        <tr>
+                             
+                            <td colspan="6">Pesquise um usuario</td>
+                        </tr>
+            
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="public/js/bootstrap.bundle.js"></script>
+    <script src="public/js/jquery.js"></script>
+    <script>
+        $(document).ready(function(){
+            
+            $(document).on("keyup","#busca",function(e){
+                e.preventDefault();
+                var buscar = $(this).val();
+                $.ajax({
+                    url: 'php/busca.php',
+                    method: 'POST',
+                    data:{
+                        buscar: buscar
+                    }
+                    
+                }).done(function(data){
+                    $(".tabela").html(data)
+                })
+            })
+        })
+    </script>
+</body>
+</html>
