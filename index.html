@@ -12,25 +12,62 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Busca Instantanea Demo</h2>
-                <input type="text" name="busca" id="busca" class="form-control" placeholder="pesquise algum usuario">
+                <h2 class="text-center">Busca Instantanea Itens</h2>
+                <form method="POST" action="busca.php">
+                <label for="filtro">Filtrar por:</label>
+                <select name="filtro" id="filtro">
+                    <option value="descricao">Descrição</option>
+                    <option value="codigo">Código</option>
+                    <option value="fornecedor">Fornecedor</option>
+                    <option value="marca">Marca</option>
+                    <option value="moto">Moto</option>
+                </select>
+            </form>
+                <input type="text" name="busca" id="busca" class="form-control" placeholder="pesquise o item">
             </div>
             <div class="card-body">
                 <table class="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Email</th>
-                            <th>Provincia</th>
-                            <th>BI</th>
-                            <th>Action</th>
+                            <th>Código</th>
+                            <th>Desc</th>
+                            <th>Forn</th>
+                            <th>Gua</th>
+                            <th>Jer</th>
+                            <th>Are</th>
+                            <th>Mai</th>
+                            <th>Cea</th>
+                            <th>Açai</th>
+                            <th>Bab</th>
+                            <th>Ana</th>
+                            <th>Tim</th>
+                            <th>Caxi</th>
+                            <th>T1</th>
+                            <th>T2</th>
+                            <th>T3</th>
+                            <th>T4</th>
+                            <th>Chi</th>
+                            <th>MV</th>
+                            <th>Custo</th>
+                            <th>A</th>
+                            <th>Atac</th>
+                            <th>V3</th>
+                            <th>V2</th>
+                            <th>V1</th>
+                            <th>P</th>
+                            <th>D</th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>Item id</th>
+
                         </tr>
                     </thead>
                     <tbody class="tabela">
                         <tr>
                              
-                            <td colspan="6">Pesquise um usuario</td>
+                            <td colspan="33">Pesquisa da itens</td>
                         </tr>
             
                     </tbody>
