@@ -9,21 +9,21 @@
     <link rel="stylesheet" href="public/css/all.css">
 </head>
 <body>
-    <div class="container">
+    <div class="c">
         <div class="card">
             <div class="card-header">
                 <h2 class="text-center">Busca Instantanea Itens</h2>
-                <form method="POST" action="busca.php">
-                <label for="filtro">Filtrar por:</label>
-                <select name="filtro" id="filtro">
-                    <option value="descricao">Descrição</option>
-                    <option value="codigo">Código</option>
-                    <option value="fornecedor">Fornecedor</option>
-                    <option value="marca">Marca</option>
-                    <option value="moto">Moto</option>
-                </select>
-            </form>
-                <input type="text" name="busca" id="busca" class="form-control" placeholder="pesquise o item">
+                <form method="POST" action="busca.php" >
+                    <label for="filtro">Filtrar por:</label>
+                    <select name="filtro" id="filtro">
+                        <option value="descricao">Descrição</option>
+                        <option value="codigo_barras">Código</option>
+                        <option value="fornecedor_id">Fornecedor</option>
+                        <option value="marca_descricao">Marca</option>
+                        <option value="descricao">Moto</option>
+                    </select>
+                </form>
+                <input type="text" name="busca" id="busca" class="form-control" placeholder="Pesquise o item">
             </div>
             <div class="card-body">
                 <table class="table table-bordered text-center">
@@ -61,15 +61,12 @@
                             <th>3</th>
                             <th>4</th>
                             <th>Item id</th>
-
                         </tr>
                     </thead>
                     <tbody class="tabela">
                         <tr>
-                             
-                            <td colspan="33">Pesquisa da itens</td>
+                            <td colspan="33">Pesquisa de itens</td>
                         </tr>
-            
                     </tbody>
                 </table>
             </div>
@@ -79,22 +76,44 @@
     <script src="public/js/jquery.js"></script>
     <script>
         $(document).ready(function(){
-            
-            $(document).on("keyup","#busca",function(e){
+            // Evento para capturar a digitação no campo de busca
+            $(document).on("keyup", "#busca", function(e){
                 e.preventDefault();
-                var buscar = $(this).val();
+                var buscar = $(this).val();  // valor da pesquisa
+                var filtro = $("#filtro").val();  // valor do filtro selecionado
+                
+                // Fazendo a requisição AJAX para busca.php
                 $.ajax({
                     url: 'php/busca.php',
                     method: 'POST',
-                    data:{
-                        buscar: buscar
+                    data: {
+                        buscar: buscar,
+                        filtro: filtro  // Envia o valor do filtro também
                     }
-                    
                 }).done(function(data){
-                    $(".tabela").html(data)
-                })
-            })
-        })
+                    $(".tabela").html(data);  // Atualiza a tabela com os dados retornados
+                });
+            });
+
+            // Evento para capturar a mudança no filtro
+            $(document).on("change", "#filtro", function(e){
+                e.preventDefault();
+                var buscar = $("#busca").val();  // valor da pesquisa
+                var filtro = $(this).val();  // valor do filtro selecionado
+                
+                // Fazendo a requisição AJAX para busca.php
+                $.ajax({
+                    url: 'php/busca.php',
+                    method: 'POST',
+                    data: {
+                        buscar: buscar,
+                        filtro: filtro  // Envia o valor do filtro também
+                    }
+                }).done(function(data){
+                    $(".tabela").html(data);  // Atualiza a tabela com os dados retornados
+                });
+            });
+        });
     </script>
 </body>
 </html>

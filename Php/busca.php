@@ -1,97 +1,86 @@
 <?php
 include("connect.php");
-$response = '';
 
-if (isset($_POST['filtro'])) {
-    $filtro = $_POST['filtro'];  // Atribui o valor do filtro à variável $filtro
-    echo "Filtro selecionado: " . htmlspecialchars($filtro);  // Exibe o valor selecionado com segurança
-    echo $filtro;
-} else {
-    echo '<script>alert("Nenhum filtro foi selecionado")</script>';
+$response = '';
+$limit = 1000;  // Número de registros por "página"
+$offset = 0;    // Inicializamos o offset
+
+// Verifica se estamos passando um parâmetro de página
+if (isset($_POST['offset'])) {
+    $offset = $_POST['offset'];
 }
 
-if(isset($_POST['buscar']) && !empty($_POST['buscar'])){
+// Verifica se o filtro e a busca foram enviados
+if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'])) {
+    $filtro = $_POST['filtro'];  // Tipo de filtro (codigo_barras, descricao, etc.)
+    $buscar = $_POST['buscar'];  // Termo de busca
 
-    $buscar = $_POST['buscar'];
-    $cmd = $pdo->prepare("SELECT * FROM itens where descricao LIKE '$buscar%'");
+    // Definindo filtros exatos e parciais
+    $valid_filters_exact = ['codigo_barras', 'fornecedor_id'];
+    $valid_filters_like = ['descricao', 'marca_descricao', 'descricao']; // Corrigido: removido filtro 'descricao' duplicado
+
+    if (in_array($filtro, $valid_filters_exact)) {
+        // Para filtros exatos, usamos WHERE e = (igualdade exata)
+        $sql = "SELECT * FROM itens_view WHERE $filtro = :buscar LIMIT $limit OFFSET $offset";
+    } elseif (in_array($filtro, $valid_filters_like)) {
+        // Para filtros LIKE, usamos WHERE e LIKE (busca parcial)
+        $sql = "SELECT * FROM itens_view WHERE $filtro LIKE :buscar LIMIT $limit OFFSET $offset";
+    } else {
+        $response .= '<tr><td colspan="33">Filtro inválido</td></tr>';
+        echo $response;
+        exit;
+    }
+
+    $cmd = $pdo->prepare($sql);
+    // Adiciona % para LIKE se necessário
+    $cmd->bindValue(':buscar', in_array($filtro, $valid_filters_like) ? '%' . $buscar . '%' : $buscar);
     $cmd->execute();
+
     $dados = $cmd->fetchAll(PDO::FETCH_CLASS);
 
     if ($cmd->rowCount() > 0) {
         foreach ($dados as $dado) {
             $response .= '
-
             <tr>
-                <td>'.$dado->codigo_barras.'</td>
-                <td>'.$dado->descricao.'</td>
-                <td>'.$dado->fornecedor_id.'</td>
-                <td>'.$dado->estoque_pdv3.'</td>
-                <td>'.$dado->estoque_pdv6.'</td>
-                <td>'.$dado->estoque_pdv5.'</td>
-                <td>'.$dado->estoque_pdv7.'</td>
-                <td>'.$dado->estoque_atual.'</td>
-                <td>'.$dado->estoque_pdv1.'</td>
-                <td>'.$dado->estoque_pdv2.'</td>
-                <td>'.$dado->estoque_pdv4.'</td>
-                <td>'.$dado->estoque_pdv9.'</td>
-                <td>'.$dado->estoque_pdv12.'</td>
-                <td>'.$dado->estoque_pdv8.'</td>
-                <td>'.$dado->estoque_pdv10.'</td>
-                <td>'.$dado->estoque_pdv11.'</td>
-                <td>'.$dado->estoque_pdv13.'</td>
-                <td>'.$dado->estoque_apartado.'</td>
-                <td>'.$dado->media_venda.'</td>
-                <td>'.$dado->custo_venda.'</td>
-                <td>'.$dado->ativo.'</td>
-                <td>'.$dado->valor_venda4.'</td>
-                <td>'.$dado->valor_venda3.'</td>
-                <td>'.$dado->valor_venda2.'</td>
-                <td>'.$dado->valor_venda1.'</td>
-                <td>'.$dado->minimo_p.'</td>
-                <td>'.$dado->minimo_d.'</td>
-                <td>'.$dado->e1.'</td>
-                <td>'.$dado->e2.'</td>
-                <td>'.$dado->e3.'</td>
-                <td>'.$dado->e4.'</td>
-                <td>'.$dado->item_id.'</td>
-
-
-
-
-
-
-
-
-
-
-
-
-            </tr>
-
-            ';
+                <td>' . htmlspecialchars($dado->codigo_barras) . '</td>
+                <td>' . htmlspecialchars($dado->descricao) . '</td>
+                <td>' . htmlspecialchars($dado->fornecedor_id) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv3) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv6) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv5) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv7) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_atual) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv1) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv2) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv4) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv9) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv12) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv8) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv10) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv11) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_pdv13) . '</td>
+                <td>' . htmlspecialchars($dado->estoque_apartado) . '</td>
+                <td>' . htmlspecialchars($dado->media_venda) . '</td>
+                <td>' . htmlspecialchars($dado->custo_venda) . '</td>
+                <td>' . htmlspecialchars($dado->ativo) . '</td>
+                <td>' . htmlspecialchars($dado->valor_venda4) . '</td>
+                <td>' . htmlspecialchars($dado->valor_venda3) . '</td>
+                <td>' . htmlspecialchars($dado->valor_venda2) . '</td>
+                <td>' . htmlspecialchars($dado->valor_venda1) . '</td>
+                <td>' . htmlspecialchars($dado->minimo_p) . '</td>
+                <td>' . htmlspecialchars($dado->minimo_d) . '</td>
+                <td>' . htmlspecialchars($dado->e1) . '</td>
+                <td>' . htmlspecialchars($dado->e2) . '</td>
+                <td>' . htmlspecialchars($dado->e3) . '</td>
+                <td>' . htmlspecialchars($dado->e4) . '</td>
+                <td>' . htmlspecialchars($dado->item_id) . '</td>
+            </tr>';
         }
-    }else{
-        $response .= '
-
-        <tr>
-        
-            <td colspan="6">Nenhum item foi achado</td>
-        
-        </tr>
-
-            ';
+    } else {
+        $response .= '<tr><td colspan="33">Nenhum item encontrado</td></tr>';
     }
-
-}else{
-    $response .= '
-
-    <tr>
-      
-        <td colspan="5">Nenhum dado Encontrado</td>
-       
-    </tr>
-
-    ';
+} else {
+    $response .= '<tr><td colspan="33">Nenhum dado encontrado</td></tr>';
 }
 
 echo $response;
