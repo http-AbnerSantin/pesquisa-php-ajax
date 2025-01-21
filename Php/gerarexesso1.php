@@ -27,6 +27,12 @@ $query = "
 $sql = $pdo->prepare($query);
 $sql->execute();
 
+if ($sql->rowCount() === 0) {
+    echo "Nenhum dado encontrado para exportação.";
+    fclose($handle);
+    return;
+}
+
 // Cabeçalho do arquivo
 $linha1 = "EXCESSO1\r\n";
 fwrite($handle, $linha1);
