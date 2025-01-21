@@ -62,7 +62,6 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
                 <td>' . htmlspecialchars($dado->codigo_barras) . '</td>
                 <td>' . htmlspecialchars($dado->descricao) . '</td>
                 <td>' . htmlspecialchars($dado->marca_descricao) . '</td>
-
                 <td>' . htmlspecialchars($dado->fornecedor_id) . '</td>
                 <td>' . htmlspecialchars($dado->estoque_pdv3) . '</td>
                 <td>' . htmlspecialchars($dado->estoque_pdv6) . '</td>
@@ -80,21 +79,22 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
                 <td>' . htmlspecialchars($dado->estoque_pdv13) . '</td>
                 <td>' . htmlspecialchars($dado->estoque_apartado) . '</td>
                 <td>' . htmlspecialchars($dado->media_venda) . '</td>
-                <td>' . htmlspecialchars($dado->custo_venda) . '</td>
-                <td>' . htmlspecialchars($dado->ativo) . '</td>
-                <td>' . htmlspecialchars($dado->valor_venda4) . '</td>
-                <td>' . htmlspecialchars($dado->valor_venda3) . '</td>
-                <td>' . htmlspecialchars($dado->valor_venda2) . '</td>
-                <td>' . htmlspecialchars($dado->valor_venda1) . '</td>
-                <td>' . htmlspecialchars($dado->minimo_p) . '</td>
-                <td>' . htmlspecialchars($dado->minimo_d) . '</td>
-                <td>' . htmlspecialchars($dado->e1) . '</td>
-                <td>' . htmlspecialchars($dado->e2) . '</td>
-                <td>' . htmlspecialchars($dado->e3) . '</td>
-                <td>' . htmlspecialchars($dado->e4) . '</td>
+                <td><input type="text" name="custo_venda" value="' . htmlspecialchars($dado->custo_venda) . '"></td>
+                <td><input type="checkbox" name="ativo" ' . ($dado->ativo ? 'checked' : '') . '></td>
+                <td><input type="text" name="valor_venda4" value="' . htmlspecialchars($dado->valor_venda4) . '"></td>
+                <td><input type="text" name="valor_venda3" value="' . htmlspecialchars($dado->valor_venda3) . '"></td>
+                <td><input type="text" name="valor_venda2" value="' . htmlspecialchars($dado->valor_venda2) . '"></td>
+                <td><input type="text" name="valor_venda1" value="' . htmlspecialchars($dado->valor_venda1) . '"></td>
+                <td><input type="text" name="minimo_p" value="' . htmlspecialchars($dado->minimo_p) . '"></td>
+                <td><input type="text" name="minimo_d" value="' . htmlspecialchars($dado->minimo_d) . '"></td>
+                <td><input type="text" name="e1" value="' . htmlspecialchars($dado->e1) . '"></td>
+                <td><input type="text" name="e2" value="' . htmlspecialchars($dado->e2) . '"></td>
+                <td><input type="text" name="e3" value="' . htmlspecialchars($dado->e3) . '"></td>
+                <td><input type="text" name="e4" value="' . htmlspecialchars($dado->e4) . '"></td>
                 <td>' . htmlspecialchars($dado->item_id) . '</td>
             </tr>';
         }
+        
 
 
     } else {
