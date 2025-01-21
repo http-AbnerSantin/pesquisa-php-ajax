@@ -18,7 +18,10 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
     // Definindo filtros exatos e parciais
     $valid_filters_exact = ['codigo_barras', 'fornecedor_id'];
     $valid_filters_like = ['descricao', 'marca_descricao']; // Corrigido: removido filtro 'descricao' duplicado
+    $valid_filters_like_2 = ['descricao_moto'];
 
+    //WHERE descricao LIKE letra%
+    // WHERE descricao_moto LIKE %letra%
 
     if (in_array($filtro, $valid_filters_exact)) {
         // Para filtros exatos, usamos WHERE e = (igualdade exata)
@@ -27,7 +30,11 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
         // Para filtros LIKE, usamos WHERE e LIKE (busca parcial)
         $sql = "SELECT * FROM itens_view WHERE $filtro LIKE :buscar LIMIT $limit OFFSET $offset";
         
-    } else {
+    } elseif(in_array($filtro, $valid_filters_like_2)) {
+        $sql = "SELECT * FROM itens_view WHERE $filtro LIKE :buscar LIMIT $limit OFFSET $offset";
+
+    }
+     else {
         $response .= '<tr><td colspan="33">Filtro inválido</td></tr>';
         echo $response;
         exit;
@@ -35,7 +42,15 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
 
     $cmd = $pdo->prepare($sql);
     // Adiciona % para LIKE se necessário
-    $cmd->bindValue(':buscar', in_array($filtro, $valid_filters_like) ?  $buscar . '%' : $buscar);
+
+    if (in_array($filtro, $valid_filters_like)) {
+        $cmd->bindValue(':buscar', $buscar . '%');
+    }elseif( in_array($filtro, $valid_filters_like_2)) {
+        $cmd->bindValue(':buscar','%' . $buscar . '%');
+    } else {
+        $cmd->bindValue(':buscar', $buscar);
+    }
+    
     $cmd->execute();
 
     $dados = $cmd->fetchAll(PDO::FETCH_CLASS);
@@ -46,6 +61,8 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
             <tr>
                 <td>' . htmlspecialchars($dado->codigo_barras) . '</td>
                 <td>' . htmlspecialchars($dado->descricao) . '</td>
+                <td>' . htmlspecialchars($dado->marca_descricao) . '</td>
+
                 <td>' . htmlspecialchars($dado->fornecedor_id) . '</td>
                 <td>' . htmlspecialchars($dado->estoque_pdv3) . '</td>
                 <td>' . htmlspecialchars($dado->estoque_pdv6) . '</td>
@@ -78,6 +95,7 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
                 <td>' . htmlspecialchars($dado->item_id) . '</td>
             </tr>';
         }
+
 
     } else {
         $response .= '<tr><td colspan="33">Nenhum item encontrado</td></tr>';
