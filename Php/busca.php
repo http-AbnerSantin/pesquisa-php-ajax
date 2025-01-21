@@ -17,7 +17,8 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
 
     // Definindo filtros exatos e parciais
     $valid_filters_exact = ['codigo_barras', 'fornecedor_id'];
-    $valid_filters_like = ['descricao', 'marca_descricao', 'descricao']; // Corrigido: removido filtro 'descricao' duplicado
+    $valid_filters_like = ['descricao', 'marca_descricao']; // Corrigido: removido filtro 'descricao' duplicado
+
 
     if (in_array($filtro, $valid_filters_exact)) {
         // Para filtros exatos, usamos WHERE e = (igualdade exata)
@@ -25,6 +26,7 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
     } elseif (in_array($filtro, $valid_filters_like)) {
         // Para filtros LIKE, usamos WHERE e LIKE (busca parcial)
         $sql = "SELECT * FROM itens_view WHERE $filtro LIKE :buscar LIMIT $limit OFFSET $offset";
+        
     } else {
         $response .= '<tr><td colspan="33">Filtro inválido</td></tr>';
         echo $response;
@@ -76,6 +78,7 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
                 <td>' . htmlspecialchars($dado->item_id) . '</td>
             </tr>';
         }
+
     } else {
         $response .= '<tr><td colspan="33">Nenhum item encontrado</td></tr>';
     }
