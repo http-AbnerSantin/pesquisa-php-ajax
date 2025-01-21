@@ -1,8 +1,7 @@
 th,td,p {
     font-size: 10px;
     text-align: start;
-    max-width: 150px; /* Limita a largura do conteúdo */
-    max-height: 40px; /* Limita a altura (opcional) */
+    
     overflow: hidden; /* Habilita o scroll */
     white-space: nowrap; /* Impede quebra de linha */
 }

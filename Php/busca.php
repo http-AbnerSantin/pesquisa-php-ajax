@@ -35,7 +35,7 @@ if (isset($_POST['filtro']) && isset($_POST['buscar']) && !empty($_POST['buscar'
 
     $cmd = $pdo->prepare($sql);
     // Adiciona % para LIKE se necessário
-    $cmd->bindValue(':buscar', in_array($filtro, $valid_filters_like) ? '%' . $buscar . '%' : $buscar);
+    $cmd->bindValue(':buscar', in_array($filtro, $valid_filters_like) ?  $buscar . '%' : $buscar);
     $cmd->execute();
 
     $dados = $cmd->fetchAll(PDO::FETCH_CLASS);
